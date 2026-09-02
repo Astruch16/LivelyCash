@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" width="720" height="320" role="img">
+  <title>Diagram of an ATM transaction travelling from the machine to the processing network and back</title>
+  <rect width="720" height="320" rx="18" fill="#f7f6f2"/>
+
+  <g stroke="#ddc52b" stroke-width="2" stroke-dasharray="4 7" stroke-linecap="round" fill="none">
+    <path d="M168 160h104"/>
+    <path d="M376 160h104"/>
+  </g>
+
+  <g fill="#141414" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14" text-anchor="middle">
+    <g>
+      <rect x="48" y="104" width="120" height="112" rx="16" fill="#ffffff" stroke="#e8e6df"/>
+      <rect x="76" y="126" width="64" height="42" rx="8" fill="#ddc52b"/>
+      <rect x="76" y="178" width="64" height="8" rx="4" fill="#141414" opacity="0.16"/>
+      <rect x="76" y="192" width="42" height="8" rx="4" fill="#141414" opacity="0.1"/>
+      <text x="108" y="248" fill="#5a5a5a">Halo II ATM</text>
+    </g>
+
+    <g>
+      <rect x="272" y="104" width="104" height="112" rx="16" fill="#ffffff" stroke="#e8e6df"/>
+      <path d="M324 132a28 28 0 1 0 0 56 28 28 0 1 0 0-56Z" fill="none" stroke="#c9b21f" stroke-width="2.5"/>
+      <path d="M296 160h56M324 132c-14 16-14 40 0 56M324 132c14 16 14 40 0 56" fill="none" stroke="#c9b21f" stroke-width="1.6" opacity="0.75"/>
+      <text x="324" y="248" fill="#5a5a5a">Encrypted link</text>
+    </g>
+
+    <g>
+      <rect x="480" y="104" width="192" height="112" rx="16" fill="#ffffff" stroke="#e8e6df"/>
+      <rect x="508" y="126" width="136" height="20" rx="8" fill="#141414" opacity="0.08"/>
+      <rect x="508" y="152" width="136" height="20" rx="8" fill="#ddc52b"/>
+      <rect x="508" y="178" width="136" height="20" rx="8" fill="#141414" opacity="0.08"/>
+      <text x="576" y="248" fill="#5a5a5a">Processing network</text>
+    </g>
+  </g>
+
+  <g fill="#5a5a5a" font-family="ui-monospace, monospace" font-size="10" letter-spacing="2" text-anchor="middle">
+    <text x="220" y="146">REQUEST</text>
+    <text x="428" y="146">AUTHORISE</text>
+  </g>
+</svg>
