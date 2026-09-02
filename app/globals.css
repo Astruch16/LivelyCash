@@ -1,26 +1,363 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * Retained so the vendored shadcn primitives in `components/ui/**` keep
+ * compiling — this site has no colour-scheme toggle and never applies `.dark`.
+ * Dark appears only as *inset bands* (the stats strip, the CTA banner), which
+ * are styled explicitly with the ink tokens below rather than by swapping the
+ * whole token set.
+ */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Brand palette — the single source of truth. Components reference these as
+ * Tailwind utilities (`bg-base-soft`, `text-ink-soft`, `border-line`, …) and
+ * never as raw hex values. `static` keeps every token in the emitted CSS so
+ * hand-written declarations like `-webkit-text-stroke` can reach them too.
+ */
+@theme static {
+  /*
+   * The page background is plain white and rides Tailwind's built-in `white`
+   * (`bg-white`). It deliberately does *not* get a `--color-base` entry here:
+   * that would also mint a `text-base` colour utility, which shadows
+   * Tailwind's 1rem `text-base` font size — the one the vendored shadcn inputs
+   * rely on to stop iOS zooming on focus. `--color-base` is still declared in
+   * `:root` below for hand-written CSS.
+   */
+  --color-base-soft: #f7f6f2;
+  --color-ink: #141414;
+  --color-ink-soft: #5a5a5a;
+  --color-accent: #ddc52b;
+  --color-accent-deep: #c9b21f;
+  /* Barely-there accent wash, for tinted note panels on a light surface. */
+  --color-accent-soft: #fbf6da;
+  --color-line: #e8e6df;
+
+  /*
+   * Ink-band surfaces. Only used *inside* a dark inset container, where the
+   * light palette above would have no contrast to work against.
+   */
+  --color-ink-raised: #1f1f1e;
+  --color-ink-line: #333331;
+  --color-ink-muted: #a5a49c;
+  /* Momentary hover flash on the accent chip of a dark button. */
+  --color-accent-bright: #f0dd63;
+
+  --font-display:
+    var(--font-michroma), "Trebuchet MS", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    var(--font-dm-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Soft lifts. Colours come from the palette so nothing hard-codes a shade. */
+  --drop-shadow-emblem: 0 28px 60px
+    color-mix(in srgb, var(--color-ink) 16%, transparent);
+  --drop-shadow-mark: 0 0 18px
+    color-mix(in srgb, var(--color-accent) 55%, transparent);
+  --shadow-panel: 0 24px 60px -32px
+    color-mix(in srgb, var(--color-ink) 34%, transparent);
+
+  /* Radii run large: pills for buttons, 2xl/3xl for cards and ink bands. */
+  --radius: 0.875rem;
+  --radius-sm: calc(var(--radius) * 0.45);
+  --radius-md: calc(var(--radius) * 0.65);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.15);
+  --radius-2xl: calc(var(--radius) * 1.45);
+  --radius-3xl: calc(var(--radius) * 2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/*
+ * shadcn's semantic layer, remapped onto the brand palette so the vendored
+ * primitives (inputs, select, sheet, dropdown) inherit the restyle without
+ * being forked. Everything here resolves to a token defined above.
+ */
+@theme inline {
+  --color-background: var(--color-base);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-base);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-base);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-ink);
+  --color-primary-foreground: var(--color-base);
+  --color-secondary: var(--color-base-soft);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-base-soft);
+  --color-muted-foreground: var(--color-ink-soft);
+  --color-accent-foreground: var(--color-ink);
+  /* Alias kept for the vendored shadcn button/badge hover states. */
+  --color-accent-strong: var(--color-accent-deep);
+  --color-border: var(--color-line);
+  --color-input: var(--color-line);
+  --color-ring: var(--color-ink);
+  /* Alias kept for the vendored shadcn primitives that use `font-heading`. */
+  --font-heading: var(--font-display);
+  --color-destructive: var(--destructive);
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Page background. See the note in `@theme` above for why it lives here. */
+  --color-base: var(--color-white);
+  --destructive: #b42318;
+  color-scheme: light;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  * {
+    @apply border-line;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply bg-white text-ink;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /*
+   * Baseline focus ring for plain links and anything shadcn doesn't style.
+   * Ink rather than accent: #DDC52B only clears 1.7:1 on white, well under the
+   * 3:1 a focus indicator needs to be perceivable.
+   */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  /*
+   * Tailwind v4's Preflight dropped v3's `button { cursor: pointer }`, leaving
+   * every button on the browser default arrow while links kept the hand. Every
+   * button, summary and select here is a click target, so put the hand back —
+   * except when disabled, where the arrow is the honest signal.
+   */
+  button:not(:disabled),
+  summary,
+  select:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/*
+ * Hero headline treatment: transparent fill with an accent stroke. The stroke
+ * thins out on small screens where a 2px outline swallows the counters.
+ */
+@utility text-outline {
+  color: transparent;
+  -webkit-text-stroke: var(--text-stroke-width, 1.25px) var(--color-accent);
+  paint-order: stroke fill;
+}
+
+/*
+ * Long-form prose for the policy pages. Element-level styling lives here so
+ * the documents themselves stay plain semantic HTML — three long pages of
+ * per-element utility classes would drift apart almost immediately.
+ */
+@utility legal-prose {
+  color: var(--color-ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+
+  & > * + * {
+    margin-top: 1rem;
+  }
+
+  & h3 {
+    margin-top: 2rem;
+    color: var(--color-ink);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  & strong {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  & a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  & a:hover {
+    color: var(--color-accent-deep);
+  }
+
+  & ul,
+  & ol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-left: 0;
+  }
+
+  & li {
+    position: relative;
+    padding-left: 1.375rem;
+  }
+
+  & ul > li::before {
+    content: "";
+    position: absolute;
+    top: 0.6875rem;
+    left: 0;
+    width: 0.3125rem;
+    height: 0.3125rem;
+    border-radius: 9999px;
+    background-color: var(--color-accent);
+  }
+
+  & ol {
+    counter-reset: legal-list;
+  }
+
+  & ol > li {
+    counter-increment: legal-list;
+  }
+
+  & ol > li::before {
+    content: counter(legal-list) ".";
+    position: absolute;
+    left: 0;
+    color: var(--color-accent-deep);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+  }
+
+  & dl {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  & dt {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  & dd {
+    margin-top: 0.125rem;
+  }
+}
+
+/*
+ * Slow pulse on the "recommended" badge floating above the Turnkey card.
+ */
+@keyframes lc-badge-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 50%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px
+      color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+}
+
+@utility badge-glow {
+  animation: lc-badge-glow 2.8s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/*
+ * FAQ disclosure. `<details>` snaps open natively; this eases the answer down
+ * instead. `::details-content` is the open/closed box, so the whole thing stays
+ * a native disclosure — keyboard accessible, exposed to assistive tech and
+ * reachable by find-in-page, with no client JavaScript.
+ *
+ * Guarded on `calc-size()` rather than on `::details-content`: the height only
+ * interpolates where `auto` is an animatable value, and without the guard a
+ * browser that dropped the invalid `block-size` would leave open answers stuck
+ * at zero height. Where it is unsupported the disclosure simply snaps, exactly
+ * as it does today.
+ */
+@utility faq-disclosure {
+  @supports (block-size: calc-size(auto, size)) {
+    &::details-content {
+      block-size: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition:
+        block-size 420ms cubic-bezier(0.32, 0.72, 0, 1),
+        opacity 260ms ease-out,
+        /* Discrete, so the content stays rendered while it collapses. */
+          content-visibility 420ms allow-discrete;
+    }
+
+    &[open]::details-content {
+      block-size: calc-size(auto, size);
+      opacity: 1;
+      /* Fade in over the second half, once there is room to read it. */
+      transition-delay: 0ms, 120ms, 0ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      &::details-content,
+      &[open]::details-content {
+        transition: none;
+        opacity: 1;
+      }
+    }
+  }
+}
+
+/*
+ * Partner marquee. The track holds two identical copies of the list, so
+ * translating it by half its width loops seamlessly.
+ */
+@keyframes lc-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility marquee-track {
+  animation: lc-marquee var(--marquee-duration, 44s) linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+/*
+ * Lenis smooth scrolling. Copied from `lenis/dist/lenis.css` rather than
+ * imported so the whole stylesheet stays in one file; only the rules this site
+ * can actually hit are kept.
+ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
