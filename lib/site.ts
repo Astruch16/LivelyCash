@@ -18,8 +18,8 @@ export const siteConfig = {
   tagline: "ATM placement & sales across the Fraser Valley",
   description:
     "Lively Cash ATMs places, sells and services Hyosung Halo II ATMs for businesses in Chilliwack, Abbotsford, Agassiz, Hope and Harrison, BC. Free placement programs, local support and transparent revenue sharing.",
-  phone: "(250) 888-2153",
-  phoneHref: "tel:+12508882153",
+  phone: "(604) 799-8937",
+  phoneHref: "tel:+16047998937",
   email: "livelycashatms@gmail.com",
   emailHref: "mailto:livelycashatms@gmail.com",
   region: "Fraser Valley, British Columbia",
