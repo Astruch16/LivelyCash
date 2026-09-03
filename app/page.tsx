@@ -258,7 +258,7 @@ export default function HomePage() {
             id="plans-heading"
             eyebrow="Our programs"
             title="Three Ways to Put an ATM on Your Floor"
-            description="Own the machine and keep the most revenue, load your own cash without buying hardware, or hand the whole thing to us. Every number is published on the plans page."
+            description="Own the machine and keep the most revenue, load your own cash without buying hardware, or hand the whole thing to us. Further details are listed on the plans page"
           />
         </Reveal>
 
