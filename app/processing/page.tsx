@@ -70,7 +70,7 @@ const connectivity = [
       "The machine runs on its own dedicated cellular connection.",
       "It never touches your business network or your Wi-Fi password.",
       "Works in older buildings, rural sites and seasonal locations where wired internet is unreliable or absent.",
-      "Free on Turnkey and Combo placements; approximately $300 CAD plus a $15 monthly communication fee on purchased machines.",
+      "Free on Turnkey and Combo placements; wholesale pricing plus a $15 monthly communication fee on purchased machines.",
     ],
   },
   {
