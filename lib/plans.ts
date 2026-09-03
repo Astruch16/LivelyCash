@@ -109,6 +109,45 @@ export const plans: Plan[] = [
   },
 ];
 
+/**
+ * Mobile ATM service — deliberately NOT a member of `plans`.
+ *
+ * The three programs above are one decision on a single axis: how involved
+ * the location wants to be, ordered highest profit to zero effort. A mobile
+ * ATM is a different product — a machine hired for the length of an event,
+ * with a flat drop fee and no surcharge share — so it is not a fourth option
+ * in that comparison. Keeping it out of the array also keeps the home page
+ * and /why-us grids at three columns, and the "three programs" wording in the
+ * Terms and Privacy pages accurate.
+ *
+ * It is typed as a `Plan` so it renders through the same `PlanDetailCard`,
+ * with identical styling and structure.
+ */
+export const mobileAtmPlan: Plan = {
+  slug: "mobile-atm-service",
+  name: "Mobile ATM Service",
+  shortName: "Mobile",
+  summary: "A stocked ATM delivered to your event, set up and ready to run.",
+  intro:
+    "For festivals, farmers markets, fairs and private events. We deliver the machine, set it up on site, supply all the cash for the event, and collect everything afterwards.",
+  profitLevel: "Event service",
+  bestFor:
+    "Event organisers, festivals, farmers markets and seasonal venues that need cash access for a few days rather than year-round.",
+  features: [
+    "We deliver the ATM to your venue and set it up on site",
+    "All cash for the event is supplied by Lively Cash",
+    "Service and support for the duration of the event",
+    "Collection and removal once the event ends",
+  ],
+  costs: [
+    {
+      label: "Drop fee",
+      value: "$499",
+      note: "Varies with the size and duration of the event",
+    },
+  ],
+};
+
 export const recommendedPlan = plans.find((plan) => plan.recommended)!;
 
 /** AML requirements that apply to Programs 1 and 2 only. */

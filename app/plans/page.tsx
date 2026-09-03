@@ -19,7 +19,12 @@ import {
 } from "@/components/marketing/section";
 import { planFaqs } from "@/lib/faqs";
 import { atmServiceJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/jsonld";
-import { amlOnboarding, plans, plansClosingLine } from "@/lib/plans";
+import {
+  amlOnboarding,
+  mobileAtmPlan,
+  plans,
+  plansClosingLine,
+} from "@/lib/plans";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -74,6 +79,13 @@ export default function PlansPage() {
                 {index + 1}. {plan.shortName}
               </a>
             ))}
+            {/* Not numbered: the mobile service sits outside the sequence. */}
+            <a
+              href={`#${mobileAtmPlan.slug}`}
+              className="inline-flex items-center rounded-full border border-line px-4 py-2.5 font-mono text-[0.625rem] font-medium tracking-[0.18em] text-ink-soft uppercase transition-colors hover:border-ink hover:text-ink"
+            >
+              {mobileAtmPlan.shortName}
+            </a>
           </nav>
         </Container>
       </section>
@@ -131,6 +143,24 @@ export default function PlansPage() {
               {amlOnboarding.outro}
             </p>
           </InkBand>
+        </Reveal>
+
+        {/*
+         * Mobile ATMs. Placed after the AML band rather than among the three
+         * cards: it is a separate service, not a fourth option in the same
+         * comparison, and the AML requirements above apply only to programs
+         * one and two. Same card component, so the styling matches exactly.
+         */}
+        <Reveal className="mt-16">
+          <SectionHeader
+            id="mobile-heading"
+            eyebrow="Also available"
+            title="Mobile ATMs for Events"
+            description="Running a festival, market or private event? We will bring a machine to you, stock it, and take it away afterwards."
+          />
+        </Reveal>
+        <Reveal className="mt-10">
+          <PlanDetailCard plan={mobileAtmPlan} />
         </Reveal>
 
         <Reveal className="mt-6">
