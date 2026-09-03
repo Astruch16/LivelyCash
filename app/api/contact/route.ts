@@ -5,7 +5,11 @@ import {
   HONEYPOT_FIELD,
   type ContactApiResponse,
 } from "@/lib/contact-schema";
-import { isEmailConfigured, sendEnquiryEmail } from "@/lib/email";
+import {
+  isEmailConfigured,
+  sendAcknowledgementEmail,
+  sendEnquiryEmail,
+} from "@/lib/email";
 import {
   getClientIp,
   MAX_REQUESTS,
@@ -147,6 +151,22 @@ export async function POST(request: Request) {
       },
       { status: 502 },
     );
+  }
+
+  /*
+   * Acknowledgement to the enquirer. Sent after the notification and never
+   * allowed to fail the request: the enquiry has already reached the business,
+   * and telling a customer their message failed to send when it did not would
+   * be worse than a missing courtesy email.
+   */
+  const acknowledgement = await sendAcknowledgementEmail(submission);
+
+  if (!acknowledgement.ok) {
+    console.warn("[contact] acknowledgement not sent", {
+      reason: acknowledgement.reason,
+      detail: acknowledgement.detail,
+      to: submission.email,
+    });
   }
 
   return json({

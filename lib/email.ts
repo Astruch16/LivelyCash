@@ -1,7 +1,7 @@
 import { Resend } from "resend";
 
 import { type ContactInput } from "@/lib/contact-schema";
-import { siteConfig } from "@/lib/site";
+import { siteConfig, siteUrl } from "@/lib/site";
 
 /**
  * Contact-form delivery, over Resend.
@@ -129,6 +129,118 @@ export async function sendEnquiryEmail(
       return { ok: false, reason: "provider", detail: error.message };
     }
 
+    return { ok: true, id: data?.id ?? "unknown" };
+  } catch (cause) {
+    return {
+      ok: false,
+      reason: "provider",
+      detail:
+        cause instanceof Error ? cause.message : "Unknown transport error",
+    };
+  }
+}
+
+/* ------------------------------------------------------------------------ *
+ * Acknowledgement to the enquirer
+ * ------------------------------------------------------------------------ */
+
+/** First name only, for the greeting. Falls back to a neutral opener. */
+function greetingName(fullName: string): string {
+  const first = fullName.trim().split(/\s+/)[0];
+  return first && first.length <= 40 ? first : "there";
+}
+
+function renderAckText(submission: ContactInput): string {
+  return [
+    `Hi ${greetingName(submission.name)},`,
+    "",
+    `Thanks for getting in touch with ${siteConfig.name}. We have your enquiry and one of us will come back to you shortly — usually within one business day.`,
+    "",
+    "Here is what you sent us:",
+    "",
+    `Business: ${submission.businessName}`,
+    `City: ${submission.city}`,
+    `Plan of interest: ${submission.plan}`,
+    "",
+    "Your message:",
+    submission.message,
+    "",
+    `If it is urgent, call us on ${siteConfig.phone} and you will get one of us, not a call centre.`,
+    "",
+    `— The ${siteConfig.name} team`,
+    siteConfig.region,
+    siteUrl,
+    "",
+  ].join("\n");
+}
+
+/**
+ * Table layout and inline styles throughout: mail clients strip <style>
+ * blocks, ignore flexbox and grid, and Outlook renders through Word. No
+ * external images either, so nothing depends on the recipient loading remote
+ * content.
+ */
+function renderAckHtml(submission: ContactInput): string {
+  const detail = (label: string, value: string) =>
+    `<tr><td style="padding:3px 16px 3px 0;color:#5a5a5a;font-size:14px;">${escapeHtml(label)}</td>` +
+    `<td style="padding:3px 0;font-size:14px;color:#141414;"><strong>${escapeHtml(value)}</strong></td></tr>`;
+
+  return [
+    '<div style="margin:0;padding:24px 12px;background:#f7f6f2;">',
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="width:100%;max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e8e6df;border-radius:12px;">',
+    '<tr><td style="padding:32px 32px 8px 32px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;">',
+    `<p style="margin:0 0 4px 0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#5a5a5a;">${escapeHtml(siteConfig.name)}</p>`,
+    '<div style="width:32px;height:2px;background:#ddc52b;margin:0 0 20px 0;"></div>',
+    `<p style="margin:0 0 16px 0;font-size:20px;line-height:1.3;color:#141414;">Thanks, ${escapeHtml(greetingName(submission.name))} — we have your enquiry.</p>`,
+    '<p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#5a5a5a;">One of us will come back to you shortly, usually within one business day.</p>',
+    '<p style="margin:0 0 8px 0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#5a5a5a;">What you sent us</p>',
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px 0;">',
+    detail("Business", submission.businessName),
+    detail("City", submission.city),
+    detail("Plan of interest", submission.plan),
+    "</table>",
+    `<div style="border-left:2px solid #e8e6df;padding:2px 0 2px 14px;margin:0 0 24px 0;"><p style="margin:0;font-size:14px;line-height:1.6;color:#5a5a5a;white-space:pre-wrap;">${escapeHtml(submission.message)}</p></div>`,
+    `<p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#141414;">If it is urgent, call us on <a href="${siteConfig.phoneHref}" style="color:#141414;">${escapeHtml(siteConfig.phone)}</a> — you will get one of us, not a call centre.</p>`,
+    "</td></tr>",
+    `<tr><td style="padding:0 32px 32px 32px;border-top:1px solid #e8e6df;font-family:system-ui,-apple-system,Segoe UI,sans-serif;">`,
+    `<p style="margin:20px 0 0 0;font-size:13px;line-height:1.6;color:#5a5a5a;">${escapeHtml(siteConfig.name)} &middot; ${escapeHtml(siteConfig.region)}<br>`,
+    `<a href="${siteUrl}" style="color:#5a5a5a;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a></p>`,
+    "</td></tr>",
+    "</table>",
+    "</div>",
+  ].join("");
+}
+
+/**
+ * Confirms receipt to the person who filled in the form.
+ *
+ * `replyTo` is the business inbox, so a reply to this message reaches Lively
+ * Cash rather than the no-reply sending address. The `from` address cannot be
+ * the Gmail account: Resend only sends from a domain verified in the account,
+ * and no third party can be authorised to send as `gmail.com`.
+ *
+ * A failure here is logged by the caller but must not fail the request — the
+ * enquiry has already reached the business, which is the part that matters.
+ */
+export async function sendAcknowledgementEmail(
+  submission: ContactInput,
+): Promise<SendResult> {
+  const config = readConfig();
+  if (!config) return { ok: false, reason: "unconfigured" };
+
+  const resend = new Resend(config.apiKey);
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: config.from,
+      to: submission.email,
+      replyTo: config.to,
+      subject: `Thanks for getting in touch — ${siteConfig.name}`,
+      text: renderAckText(submission),
+      html: renderAckHtml(submission),
+    });
+
+    if (error) return { ok: false, reason: "provider", detail: error.message };
     return { ok: true, id: data?.id ?? "unknown" };
   } catch (cause) {
     return {
