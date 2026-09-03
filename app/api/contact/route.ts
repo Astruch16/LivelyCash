@@ -6,11 +6,17 @@ import {
   type ContactApiResponse,
 } from "@/lib/contact-schema";
 import {
+  isEmailConfigured,
+  sendAcknowledgementEmail,
+  sendEnquiryEmail,
+} from "@/lib/email";
+import {
   getClientIp,
   MAX_REQUESTS,
   memoryRateLimitStore,
   type RateLimitStore,
 } from "@/lib/rate-limit";
+import { siteConfig } from "@/lib/site";
 
 /**
  * Swap this binding for a Redis-backed store in production — see the TODO in
@@ -89,33 +95,79 @@ export async function POST(request: Request) {
 
   const submission = parsed.data;
 
-  // TODO(email): wire up delivery with Resend.
-  //   1. `npm install resend`
-  //   2. Add RESEND_API_KEY and CONTACT_TO_EMAIL to the environment.
-  //   3. Replace the console.info below with something like:
-  //
-  //      const resend = new Resend(process.env.RESEND_API_KEY);
-  //      await resend.emails.send({
-  //        from: "Lively Cash Website <website@livelycashatms.ca>",
-  //        to: process.env.CONTACT_TO_EMAIL!,
-  //        replyTo: submission.email,
-  //        subject: `New enquiry — ${submission.businessName} (${submission.city})`,
-  //        text: renderEnquiry(submission),
-  //      });
-  //
-  //   Keep the handler returning 200 only after delivery succeeds, and return
-  //   502 with a friendly message if the provider errors.
-  console.info("[contact] new enquiry", {
-    receivedAt: new Date().toISOString(),
-    ip,
-    name: submission.name,
-    businessName: submission.businessName,
-    email: submission.email,
-    phone: submission.phone,
-    city: submission.city,
-    plan: submission.plan,
-    message: submission.message,
-  });
+  /*
+   * Delivery. The handler only reports success once the provider has accepted
+   * the message: a form that says "we'll be in touch" while the enquiry goes
+   * nowhere is worse than one that admits it failed and offers the phone
+   * number.
+   *
+   * Without mail configured we fall back to logging, but only outside
+   * production — that keeps `npm run dev` usable without an API key, while a
+   * misconfigured deployment fails loudly instead of silently dropping leads.
+   */
+  if (!isEmailConfigured()) {
+    if (process.env.NODE_ENV === "production") {
+      console.error(
+        "[contact] RESEND_API_KEY or CONTACT_TO_EMAIL is not set — enquiry not delivered",
+        { businessName: submission.businessName, email: submission.email },
+      );
+
+      return json(
+        {
+          ok: false,
+          message: `Sorry — we couldn't send that just now. Please email us at ${siteConfig.email} or call ${siteConfig.phone}.`,
+        },
+        { status: 502 },
+      );
+    }
+
+    console.info("[contact] no mail configured, logging enquiry", {
+      receivedAt: new Date().toISOString(),
+      ip,
+      ...submission,
+    });
+
+    return json({
+      ok: true,
+      message: "Thanks — we'll be in touch shortly.",
+    });
+  }
+
+  const delivery = await sendEnquiryEmail(submission);
+
+  if (!delivery.ok) {
+    // The enquirer's details go to the log so nothing is lost if mail is down.
+    console.error("[contact] delivery failed", {
+      reason: delivery.reason,
+      detail: delivery.detail,
+      receivedAt: new Date().toISOString(),
+      ...submission,
+    });
+
+    return json(
+      {
+        ok: false,
+        message: `Sorry — we couldn't send that just now. Please email us at ${siteConfig.email} or call ${siteConfig.phone}.`,
+      },
+      { status: 502 },
+    );
+  }
+
+  /*
+   * Acknowledgement to the enquirer. Sent after the notification and never
+   * allowed to fail the request: the enquiry has already reached the business,
+   * and telling a customer their message failed to send when it did not would
+   * be worse than a missing courtesy email.
+   */
+  const acknowledgement = await sendAcknowledgementEmail(submission);
+
+  if (!acknowledgement.ok) {
+    console.warn("[contact] acknowledgement not sent", {
+      reason: acknowledgement.reason,
+      detail: acknowledgement.detail,
+      to: submission.email,
+    });
+  }
 
   return json({
     ok: true,
