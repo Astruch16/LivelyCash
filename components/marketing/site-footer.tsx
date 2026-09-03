@@ -77,7 +77,7 @@ export function SiteFooter() {
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p>
-              &copy; {year} {siteConfig.legalName}. All rights reserved.
+              &copy; {year} {siteConfig.shortName}. All rights reserved.
             </p>
             <p>
               Chilliwack &middot; Abbotsford &middot; Agassiz &middot; Hope
