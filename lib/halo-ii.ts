@@ -52,7 +52,11 @@ export const haloIiSpecs: SpecGroup[] = [
   },
   {
     label: "Communication",
-    entries: [{ text: "TCP/IP" }, { text: "Dial-up" }],
+    entries: [
+      { text: "TCP/IP" },
+      { text: "Dial-up" },
+      { text: "DPL (Wireless Internet Modem)" },
+    ],
   },
   {
     label: "Security",
@@ -95,7 +99,6 @@ export const haloIiSpecs: SpecGroup[] = [
       { text: "EPP indicator" },
       { text: "Lead-through indicator" },
       { text: "Earphone jack" },
-      { text: "NFC reader (optional)" },
       { text: "Digital receipt" },
       {
         text: "Six languages",
