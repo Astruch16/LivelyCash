@@ -72,7 +72,7 @@ export const plans: Plan[] = [
       "Location loads the ATM with cash",
       "Supplies and parts provided by Lively Cash",
       "Lively Cash provides maintenance calls upon request",
-      "Surcharge profits: 65% Lively Cash / 35% location with DPL service, or 60% / 40% if you connect to your existing internet",
+      "Surcharge profits are determined based on average usage of the ATM — please inquire for further details. Connecting to your existing internet increases your share by 5%.",
     ],
     costs: [
       { label: "ATM", value: "FREE" },
@@ -98,6 +98,7 @@ export const plans: Plan[] = [
       "No responsibility on your end — you don't need to lift a finger",
       "Weekly cash stocking — so your customers never walk away empty-handed",
       "Secured installation — the ATM is professionally bolted and secured for safety and security",
+      "Surcharge profits are determined based on average usage of the ATM — please inquire for further details.",
     ],
     costs: [
       { label: "ATM, installation & setup", value: "FREE" },

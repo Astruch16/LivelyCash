@@ -58,7 +58,7 @@ const differentiators = [
   {
     icon: ScaleIcon,
     title: "Transparent revenue sharing",
-    body: "Our splits and per-transaction fees are published on the plans page before you talk to anyone. $0.50 or $0.65 per transaction on purchased machines. 65/35 or 60/40 on combo placements. No schedule you only see after signing.",
+    body: "No schedule you only see after signing. We'll walk you through the per-transaction fees and surcharge sharing for your specific location before you commit to anything — and the equipment is wholesale, with no upcharge.",
   },
   {
     icon: SlidersHorizontalIcon,

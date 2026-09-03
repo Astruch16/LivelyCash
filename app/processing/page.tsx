@@ -80,7 +80,7 @@ const connectivity = [
     points: [
       "The ATM connects over your existing wired connection.",
       "No DPL device to buy and no monthly communication fee.",
-      "Improves your terms: the Combo surcharge split moves from 65/35 to 60/40 in your favour.",
+      "Improves your terms: the Combo surcharge split gets increased 5% in your favour.",
       "Best where you have a stable business connection that is not routinely unplugged or reset.",
     ],
   },

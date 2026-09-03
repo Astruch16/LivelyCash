@@ -18,7 +18,7 @@ export const planFaqs: readonly Faq[] = [
   {
     question: "Do I need to give the ATM access to my internet connection?",
     answer:
-      "No. Every machine can run on a DPL wireless communication device, which gives the ATM its own secure connection independent of your network. Connecting to your existing local internet is optional, and on the Purchase and Combo programs it improves your terms — the DPL fee is waived and the Combo surcharge split moves from 65/35 to 60/40 in your favour.",
+      "No. Every machine can run on a DPL wireless communication device, which gives the ATM its own secure connection independent of your network. Connecting to your existing local internet is optional, and on the Purchase and Combo programs it improves your terms — the DPL fee is waived and the Combo surcharge split gets increased 5% in your favour.",
   },
   {
     question: "What paperwork do I need to provide?",
