@@ -165,7 +165,9 @@ function renderAckText(submission: ContactInput): string {
     "Your message:",
     submission.message,
     "",
-    `If it is urgent, call us on ${siteConfig.phone} and you will get one of us, not a call centre.`,
+    `In a hurry? Call us on ${siteConfig.phone} and you will get one of us, not a call centre.`,
+    "",
+    "Or simply reply to this email — it comes straight to us.",
     "",
     `— The ${siteConfig.name} team`,
     siteConfig.region,
@@ -174,40 +176,123 @@ function renderAckText(submission: ContactInput): string {
   ].join("\n");
 }
 
+/*
+ * Brand palette, mirrored from `app/globals.css`. Email cannot reference the
+ * Tailwind tokens, so these are the one place the hex values are repeated —
+ * change them here if the site's palette moves.
+ */
+const C = {
+  base: "#ffffff",
+  baseSoft: "#f7f6f2",
+  ink: "#141414",
+  inkSoft: "#5a5a5a",
+  inkMuted: "#a5a49c",
+  accent: "#ddc52b",
+  line: "#e8e6df",
+} as const;
+
+/*
+ * Michroma and DM Sans cannot be relied on: Gmail strips @font-face outright
+ * and Outlook renders through Word. The brand reads through the palette, the
+ * ink header, the accent rule and the letter-spaced mono labels instead — and
+ * mono is the one part of the type system that survives everywhere, since
+ * every platform ships a monospace face.
+ */
+const SANS =
+  "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+const MONO =
+  "ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace";
+
+/** Letter-spaced uppercase mono label — the site's section eyebrow. */
+function eyebrow(text: string, color: string = C.inkSoft): string {
+  return `<p style="margin:0;font-family:${MONO};font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:${color};">${escapeHtml(text)}</p>`;
+}
+
+/** The short accent rule that sits under every eyebrow on the site. */
+function accentRule(topMargin = 10): string {
+  return `<div style="width:28px;height:2px;background:${C.accent};margin:${topMargin}px 0 0 0;font-size:0;line-height:0;">&nbsp;</div>`;
+}
+
 /**
- * Table layout and inline styles throughout: mail clients strip <style>
- * blocks, ignore flexbox and grid, and Outlook renders through Word. No
- * external images either, so nothing depends on the recipient loading remote
- * content.
+ * The acknowledgement, styled to match the site.
+ *
+ * Tables and inline styles throughout, and no images of any kind: Gmail strips
+ * inline SVG and blocks `data:` URIs, and remote images are hidden by default
+ * in most clients, so the hexagon motif cannot survive the trip. Rounded
+ * corners degrade to square in Outlook on Windows, which is the intended
+ * fallback rather than a bug.
  */
 function renderAckHtml(submission: ContactInput): string {
-  const detail = (label: string, value: string) =>
-    `<tr><td style="padding:3px 16px 3px 0;color:#5a5a5a;font-size:14px;">${escapeHtml(label)}</td>` +
-    `<td style="padding:3px 0;font-size:14px;color:#141414;"><strong>${escapeHtml(value)}</strong></td></tr>`;
+  const row = (label: string, value: string) =>
+    `<tr>` +
+    `<td style="padding:7px 18px 7px 0;font-family:${SANS};font-size:13px;line-height:1.5;color:${C.inkSoft};vertical-align:top;white-space:nowrap;">${escapeHtml(label)}</td>` +
+    `<td style="padding:7px 0;font-family:${SANS};font-size:14px;line-height:1.5;color:${C.ink};font-weight:600;vertical-align:top;">${escapeHtml(value)}</td>` +
+    `</tr>`;
 
   return [
-    '<div style="margin:0;padding:24px 12px;background:#f7f6f2;">',
-    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="width:100%;max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e8e6df;border-radius:12px;">',
-    '<tr><td style="padding:32px 32px 8px 32px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;">',
-    `<p style="margin:0 0 4px 0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#5a5a5a;">${escapeHtml(siteConfig.name)}</p>`,
-    '<div style="width:32px;height:2px;background:#ddc52b;margin:0 0 20px 0;"></div>',
-    `<p style="margin:0 0 16px 0;font-size:20px;line-height:1.3;color:#141414;">Thanks, ${escapeHtml(greetingName(submission.name))} — we have your enquiry.</p>`,
-    '<p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#5a5a5a;">One of us will come back to you shortly, usually within one business day.</p>',
-    '<p style="margin:0 0 8px 0;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#5a5a5a;">What you sent us</p>',
-    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 20px 0;">',
-    detail("Business", submission.businessName),
-    detail("City", submission.city),
-    detail("Plan of interest", submission.plan),
-    "</table>",
-    `<div style="border-left:2px solid #e8e6df;padding:2px 0 2px 14px;margin:0 0 24px 0;"><p style="margin:0;font-size:14px;line-height:1.6;color:#5a5a5a;white-space:pre-wrap;">${escapeHtml(submission.message)}</p></div>`,
-    `<p style="margin:0 0 24px 0;font-size:15px;line-height:1.6;color:#141414;">If it is urgent, call us on <a href="${siteConfig.phoneHref}" style="color:#141414;">${escapeHtml(siteConfig.phone)}</a> — you will get one of us, not a call centre.</p>`,
-    "</td></tr>",
-    `<tr><td style="padding:0 32px 32px 32px;border-top:1px solid #e8e6df;font-family:system-ui,-apple-system,Segoe UI,sans-serif;">`,
-    `<p style="margin:20px 0 0 0;font-size:13px;line-height:1.6;color:#5a5a5a;">${escapeHtml(siteConfig.name)} &middot; ${escapeHtml(siteConfig.region)}<br>`,
-    `<a href="${siteUrl}" style="color:#5a5a5a;">${escapeHtml(siteUrl.replace(/^https?:\/\//, ""))}</a></p>`,
-    "</td></tr>",
-    "</table>",
-    "</div>",
+    `<div style="margin:0;padding:32px 12px;background:${C.baseSoft};">`,
+
+    // Preheader: the grey line of text clients show beside the subject.
+    `<div style="display:none;max-height:0;overflow:hidden;opacity:0;">We have your enquiry and will come back to you within one business day.</div>`,
+
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" width="600" style="width:100%;max-width:600px;margin:0 auto;border-collapse:separate;">`,
+    `<tr><td style="background:${C.base};border:1px solid ${C.line};border-radius:16px;">`,
+
+    // Ink header — the site's dark inset band.
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:separate;">`,
+    `<tr><td style="background:${C.ink};padding:30px 32px;border-radius:15px 15px 0 0;">`,
+    eyebrow(siteConfig.name, C.base),
+    accentRule(12),
+    `<p style="margin:16px 0 0 0;font-family:${MONO};font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:${C.inkMuted};">${escapeHtml(siteConfig.region)}</p>`,
+    `</td></tr>`,
+    `</table>`,
+
+    // Body.
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">`,
+    `<tr><td style="padding:36px 32px 8px 32px;">`,
+    `<h1 style="margin:0 0 14px 0;font-family:${SANS};font-size:23px;line-height:1.3;font-weight:600;color:${C.ink};">Thanks, ${escapeHtml(greetingName(submission.name))} &mdash; we have your enquiry.</h1>`,
+    `<p style="margin:0 0 28px 0;font-family:${SANS};font-size:15px;line-height:1.65;color:${C.inkSoft};">One of us will come back to you shortly, usually within one business day. Here is what came through.</p>`,
+    `</td></tr>`,
+
+    // Summary panel, on the site's soft surface.
+    `<tr><td style="padding:0 32px;">`,
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:${C.baseSoft};border:1px solid ${C.line};border-radius:14px;border-collapse:separate;">`,
+    `<tr><td style="padding:24px;">`,
+    eyebrow("Your enquiry"),
+    accentRule(),
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0 0 0;">`,
+    row("Business", submission.businessName),
+    row("City", submission.city),
+    row("Interested in", submission.plan),
+    `</table>`,
+    `<div style="height:1px;background:${C.line};margin:20px 0;font-size:0;line-height:0;">&nbsp;</div>`,
+    eyebrow("Your message"),
+    `<p style="margin:12px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.7;color:${C.inkSoft};white-space:pre-wrap;">${escapeHtml(submission.message)}</p>`,
+    `</td></tr></table>`,
+    `</td></tr>`,
+
+    // Call to action — a real pill button, not a styled link.
+    `<tr><td style="padding:30px 32px 0 32px;">`,
+    `<p style="margin:0 0 18px 0;font-family:${SANS};font-size:15px;line-height:1.65;color:${C.ink};">In a hurry? Call us and you will get one of us, not a call centre.</p>`,
+    `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>`,
+    `<td align="center" bgcolor="${C.accent}" style="border-radius:999px;">`,
+    `<a href="${siteConfig.phoneHref}" style="display:inline-block;padding:14px 28px;font-family:${MONO};font-size:13px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:${C.ink};text-decoration:none;border-radius:999px;">${escapeHtml(siteConfig.phone)}</a>`,
+    `</td></tr></table>`,
+    `<p style="margin:18px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.65;color:${C.inkSoft};">Or simply reply to this email &mdash; it comes straight to us.</p>`,
+    `</td></tr>`,
+
+    // Footer.
+    `<tr><td style="padding:32px 32px 30px 32px;">`,
+    `<div style="height:1px;background:${C.line};margin:0 0 22px 0;font-size:0;line-height:0;">&nbsp;</div>`,
+    eyebrow(siteConfig.name),
+    `<p style="margin:12px 0 0 0;font-family:${SANS};font-size:13px;line-height:1.7;color:${C.inkSoft};">${escapeHtml(siteConfig.region)}<br>`,
+    `<a href="${siteUrl}" style="color:${C.inkSoft};text-decoration:underline;">${escapeHtml(siteUrl.replace(/^https?:\/\/(www\.)?/, ""))}</a></p>`,
+    `</td></tr>`,
+    `</table>`,
+
+    `</td></tr>`,
+    `</table>`,
+    `</div>`,
   ].join("");
 }
 
