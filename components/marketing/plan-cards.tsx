@@ -147,8 +147,20 @@ export function PlanSummaryCard({ plan }: { plan: Plan }) {
   );
 }
 
-/** Full plan card with every feature and the complete cost breakdown. */
-export function PlanDetailCard({ plan, index }: { plan: Plan; index: number }) {
+/**
+ * Full plan card with every feature and the complete cost breakdown.
+ *
+ * `index` numbers the card within the three-program comparison. It is omitted
+ * for offerings that sit outside that sequence — the mobile ATM service — in
+ * which case the "Program N" chip is left off and the profit-level chip leads.
+ */
+export function PlanDetailCard({
+  plan,
+  index,
+}: {
+  plan: Plan;
+  index?: number;
+}) {
   return (
     <article
       id={plan.slug}
@@ -165,9 +177,11 @@ export function PlanDetailCard({ plan, index }: { plan: Plan; index: number }) {
       <div className="flex flex-col gap-8 p-6 sm:p-9 lg:flex-row lg:gap-12">
         <div className="lg:w-[58%]">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-[0.625rem] font-medium tracking-[0.2em] text-ink-soft uppercase">
-              Program {index + 1}
-            </span>
+            {index === undefined ? null : (
+              <span className="font-mono text-[0.625rem] font-medium tracking-[0.2em] text-ink-soft uppercase">
+                Program {index + 1}
+              </span>
+            )}
             <span className="inline-flex items-center rounded-full border border-line px-3 py-1.5 font-mono text-[0.625rem] font-medium tracking-[0.18em] text-ink-soft uppercase">
               {plan.profitLevel}
             </span>
