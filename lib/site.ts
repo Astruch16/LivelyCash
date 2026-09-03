@@ -3,11 +3,13 @@
  * details. Update the placeholder contact values before launch.
  */
 
-// TODO(launch): point NEXT_PUBLIC_SITE_URL at the real production domain.
+// The registered domain is livelycashatms.com. There is no .ca — an earlier
+// placeholder used it, and a missing env var would have advertised a domain
+// nobody owns in every canonical URL, OG tag and sitemap entry.
 // Canonical URLs, Open Graph tags, the sitemap and robots.txt all derive
 // from this value.
 export const siteUrl = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.livelycashatms.ca"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.livelycashatms.com"
 ).replace(/\/$/, "");
 
 export const siteConfig = {
