@@ -46,12 +46,12 @@ export const plans: Plan[] = [
     costs: [
       {
         label: "ATM",
-        value: "Approx. $4,000 – $5,000",
+        value: "Wholesale pricing, no upcharge or hidden fees",
         note: "Includes shipping and installation",
       },
       {
         label: "DPL (wireless communication device)",
-        value: "Approx. $300 CAD + $15 monthly communication fee",
+        value: "Wholesale pricing + $15 monthly communication fee",
         note: "Free if you connect to your local internet",
       },
       { label: "Shipping and installation", value: "FREE" },

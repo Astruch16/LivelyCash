@@ -177,8 +177,8 @@ export function Hero() {
              * The headline is the three programs, in order: buy the machine
              * (Purchase), load it yourself (Combo), or just give it floor space
              * (Turnkey). It deliberately does not lead on "free" — only two of
-             * the three cost nothing up front, and the Purchase program runs
-             * $4,000–$5,000. See `lib/plans.ts`.
+             * the three cost nothing up front; the Purchase program buys the
+             * machine at wholesale. See `lib/plans.ts`.
              *
              * TODO(launch): final headline copy needs sign-off. The two-part
              * pattern — solid lines, then one outlined accent line closed by a

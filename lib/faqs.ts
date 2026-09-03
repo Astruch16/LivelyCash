@@ -13,7 +13,7 @@ export const planFaqs: readonly Faq[] = [
   {
     question: "Which program makes my business the most money?",
     answer:
-      "The ATM Purchase Program generates the highest profit, because you own the machine and keep the surcharge apart from a fixed $0.50 or $0.65 per transaction to Lively Cash. It also has the highest up-front cost, roughly $4,000 to $5,000 for the ATM. The Combo Program is the middle option, and Turnkey earns the least but requires nothing from you at all.",
+      "The ATM Purchase Program generates the highest profit, because you own the machine and keep the surcharge apart from a small fixed amount per transaction to Lively Cash. It is also the only program with an up-front hardware cost — and the ATM is sold at wholesale pricing, with no upcharge or hidden fees. The Combo Program is the middle option, and Turnkey earns the least but requires nothing from you at all.",
   },
   {
     question: "Do I need to give the ATM access to my internet connection?",

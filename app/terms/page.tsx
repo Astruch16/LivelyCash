@@ -109,9 +109,9 @@ const sections: LegalSection[] = [
         </p>
         <ul>
           <li>
-            Hardware pricing under the ATM Purchase Program is shown as an
-            approximate range and depends on the machine configuration, shipping
-            and site conditions at the time of quote.
+            Hardware under the ATM Purchase Program is offered at wholesale
+            pricing. The final figure depends on the machine configuration,
+            shipping and site conditions at the time of quote.
           </li>
           <li>
             Wireless (DPL) device pricing and the monthly communication fee are
