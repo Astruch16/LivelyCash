@@ -95,7 +95,7 @@ const comparison = [
   },
   {
     label: "Revenue terms",
-    us: "Published rates and splits before you sign anything",
+    us: "Walked through with you before you sign anything",
     them: "Quoted case by case, disclosed in a schedule",
   },
   {
@@ -269,6 +269,25 @@ export default function WhyUsPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/*
+             * The human argument the table is building towards. Kept inside
+             * the ink band rather than given its own section: the comparison
+             * is what earns it, and the page already runs long.
+             */}
+            <div className="mt-12 max-w-3xl border-t border-ink-line pt-10">
+              <Eyebrow surface="ink">The personal part</Eyebrow>
+              <DisplayHeading as="h3" size="minor" className="mt-5 text-white">
+                The Same People, Every Time
+              </DisplayHeading>
+              <p className="mt-4 text-pretty text-ink-muted">
+                You get a direct number and a name, not a support queue. The
+                person who surveys your site is the person who installs the
+                machine, and the person who picks up when you call about it.
+                That is only possible because we are small and local &mdash; and
+                it is the main reason our locations stay with us.
+              </p>
             </div>
           </InkBand>
         </Reveal>
