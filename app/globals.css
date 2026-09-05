@@ -58,6 +58,16 @@
     color-mix(in srgb, var(--color-accent) 55%, transparent);
   --shadow-panel: 0 24px 60px -32px
     color-mix(in srgb, var(--color-ink) 34%, transparent);
+  /*
+   * Accent halo for the hexagon icon chips. Two strengths: a resting glow,
+   * and a brighter one the row lifts to on hover. Softer and wider than
+   * `--drop-shadow-mark`, which is sized for the single hero logo mark rather
+   * than a column of five small chips.
+   */
+  --drop-shadow-glow: 0 0 10px
+    color-mix(in srgb, var(--color-accent) 45%, transparent);
+  --drop-shadow-glow-strong: 0 0 18px
+    color-mix(in srgb, var(--color-accent) 70%, transparent);
 
   /* Radii run large: pills for buttons, 2xl/3xl for cards and ink bands. */
   --radius: 0.875rem;
