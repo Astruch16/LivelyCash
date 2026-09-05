@@ -48,7 +48,7 @@ const values = [
     icon: HandshakeIcon,
     title: "Honest revenue sharing",
     description:
-      "Our splits and fees are published on the plans page, not buried in a schedule you see after signing. If a program is a bad fit for your volume, we will tell you that instead of selling it to you.",
+      "Our splits and per-transaction fees are walked through with you before you sign anything, not buried in a schedule you only see afterwards. If a program is a bad fit for your volume, we will tell you that instead of selling it to you.",
   },
   {
     icon: HeartHandshakeIcon,
@@ -115,8 +115,8 @@ export default function AboutPage() {
                 actually want: buy the machine and keep the lion&rsquo;s share
                 of the surcharge, load your own cash without the capital outlay,
                 or hand the entire thing over and never think about it again.
-                Whichever you choose, the terms are written down and the numbers
-                are published.
+                Whichever you choose, the terms are written down and we walk you
+                through the numbers before you commit to anything.
               </p>
               <p>
                 We also try to be honest about fit. An ATM is not right for
@@ -178,12 +178,23 @@ export default function AboutPage() {
           stagger={0.07}
         >
           {values.map((value) => (
+            /*
+             * The site's standard card hover — lift, accent edge, shadow —
+             * the same treatment the processing, plan and differentiator
+             * cards use. Not links, so no pointer cursor. The transition
+             * names its properties rather than using `transition` (all),
+             * which would also animate the opacity and transform Motion
+             * drives during the scroll reveal.
+             */
             <RevealItem
               as="li"
               key={value.title}
-              className="flex flex-col rounded-2xl border border-line bg-white p-6 sm:p-7"
+              className="group flex flex-col rounded-2xl border border-line bg-white p-6 transition-[border-color,box-shadow,translate] duration-300 ease-out hover:border-accent hover:shadow-panel motion-safe:hover:-translate-y-1 sm:p-7"
             >
-              <HexIcon frameClassName="text-accent/70">
+              <HexIcon
+                className="transition-transform duration-300 ease-out motion-safe:group-hover:scale-110"
+                frameClassName="text-accent/70 transition-colors duration-300 ease-out group-hover:text-accent"
+              >
                 <value.icon
                   aria-hidden="true"
                   strokeWidth={1.5}
