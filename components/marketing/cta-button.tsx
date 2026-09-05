@@ -18,7 +18,15 @@ const MotionLink = motion.create(Link);
 export type CtaVariant = "dark" | "accent" | "ghost" | "ghost-ink" | "outline";
 
 const shellStyles: Record<CtaVariant, string> = {
-  dark: "bg-ink text-white hover:bg-black focus-visible:outline-ink",
+  /*
+   * The accent edge is a ring rather than a border: a border would grow the
+   * button by 2px on hover and shove its neighbours, while a ring paints as a
+   * box-shadow and costs no layout. It sits outside the pill so the black fill
+   * keeps its full size. `ring-transparent` at rest gives the colour something
+   * to animate from, and the transition is widened from the base
+   * `transition-colors`, which does not cover box-shadow.
+   */
+  dark: "bg-ink text-white ring-1 ring-transparent transition-[background-color,box-shadow] hover:bg-black hover:ring-accent focus-visible:outline-ink",
   accent:
     "bg-accent text-ink hover:bg-accent-deep focus-visible:outline-ink focus-visible:outline-offset-3",
   ghost:
