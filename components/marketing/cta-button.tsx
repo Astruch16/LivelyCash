@@ -25,9 +25,17 @@ const shellStyles: Record<CtaVariant, string> = {
     "text-ink hover:text-black focus-visible:outline-ink [&_[data-chip]]:border [&_[data-chip]]:border-line",
   "ghost-ink":
     "text-white focus-visible:outline-accent [&_[data-chip]]:border [&_[data-chip]]:border-white/30",
-  // Ghost with a pill outline, so it reads as a button beside a filled one.
+  /*
+   * Ghost with a pill outline, so it reads as a button beside a filled one.
+   *
+   * The edge is a ring rather than a border. A real border adds 1px to every
+   * side, which made this variant 2px taller than the filled button next to
+   * it and left it overhanging by a pixel top and bottom. A ring paints as a
+   * box-shadow, so the pill keeps the same box as `dark` and `accent` and the
+   * pair line up exactly.
+   */
   outline:
-    "border border-line text-ink hover:border-ink focus-visible:outline-ink [&_[data-chip]]:border [&_[data-chip]]:border-line",
+    "ring-1 ring-inset ring-line text-ink hover:ring-ink focus-visible:outline-ink [&_[data-chip]]:border [&_[data-chip]]:border-line",
 };
 
 const chipStyles: Record<CtaVariant, string> = {
