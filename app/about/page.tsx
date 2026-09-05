@@ -78,7 +78,7 @@ export default function AboutPage() {
             <CtaButton href="/contact" variant="dark">
               Talk to us
             </CtaButton>
-            <CtaButton href="/plans" variant="ghost">
+            <CtaButton href="/plans" variant="outline">
               See our plans
             </CtaButton>
           </PageHeader>
