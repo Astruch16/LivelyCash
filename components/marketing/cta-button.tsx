@@ -15,7 +15,8 @@ const MotionLink = motion.create(Link);
  * `href` for a link or `type` for a form control — nothing else should
  * hand-roll a button.
  */
-export type CtaVariant = "dark" | "accent" | "ghost" | "ghost-ink" | "outline";
+export type CtaVariant =
+  "dark" | "accent" | "accent-ink" | "ghost" | "ghost-ink" | "outline";
 
 const shellStyles: Record<CtaVariant, string> = {
   /*
@@ -29,10 +30,23 @@ const shellStyles: Record<CtaVariant, string> = {
   dark: "bg-ink text-white ring-1 ring-transparent transition-[background-color,box-shadow] hover:bg-black hover:ring-accent focus-visible:outline-ink",
   accent:
     "bg-accent text-ink hover:bg-accent-deep focus-visible:outline-ink focus-visible:outline-offset-3",
+  /*
+   * `accent` for a dark surface. Same fill, but the hover edge is white:
+   * accent-on-accent would be invisible, and ink would disappear into the band
+   * behind it. Paired with `accent` the way `ghost-ink` is paired with
+   * `ghost`. The focus ring goes white for the same reason.
+   */
+  "accent-ink":
+    "bg-accent text-ink ring-1 ring-transparent transition-[background-color,box-shadow] hover:bg-accent-deep hover:ring-white focus-visible:outline-white focus-visible:outline-offset-3",
   ghost:
     "text-ink hover:text-black focus-visible:outline-ink [&_[data-chip]]:border [&_[data-chip]]:border-line",
+  /*
+   * Carries a white pill edge at rest so it reads as a button against the ink
+   * band rather than a bare text link, and warms to accent on hover. A ring
+   * rather than a border, so nothing shifts — see the note on `dark`.
+   */
   "ghost-ink":
-    "text-white focus-visible:outline-accent [&_[data-chip]]:border [&_[data-chip]]:border-white/30",
+    "text-white ring-1 ring-white transition-[color,box-shadow] hover:ring-accent focus-visible:outline-accent [&_[data-chip]]:border [&_[data-chip]]:border-white/30 hover:[&_[data-chip]]:border-accent",
   /*
    * Ghost with a pill outline, so it reads as a button beside a filled one.
    *
@@ -49,6 +63,7 @@ const shellStyles: Record<CtaVariant, string> = {
 const chipStyles: Record<CtaVariant, string> = {
   dark: "bg-accent text-ink",
   accent: "bg-ink text-accent",
+  "accent-ink": "bg-ink text-accent",
   ghost: "text-ink group-hover/cta:border-accent",
   "ghost-ink": "text-white group-hover/cta:border-accent",
   outline: "text-ink group-hover/cta:border-accent",
