@@ -178,9 +178,21 @@ export default function HomePage() {
               <RevealItem
                 as="li"
                 key={feature.title}
-                className="flex items-start gap-4"
+                className="group flex items-start gap-4"
               >
-                <HexIcon size="sm" frameClassName="text-line">
+                {/*
+                 * The chip glows rather than the glyph: the halo is a filter
+                 * on the whole hexagon, so the frame and the icon inside pick
+                 * it up together. The frame moves to accent to give the glow
+                 * something to come from — it is aria-hidden decoration, so
+                 * the low contrast of accent on white does not apply, and the
+                 * glyph itself stays ink.
+                 */}
+                <HexIcon
+                  size="sm"
+                  className="drop-shadow-glow transition-[filter] duration-300 ease-out group-hover:drop-shadow-glow-strong"
+                  frameClassName="text-accent"
+                >
                   <feature.icon
                     aria-hidden="true"
                     strokeWidth={1.5}
