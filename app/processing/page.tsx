@@ -161,10 +161,16 @@ export default function ProcessingPage() {
           stagger={0.06}
         >
           {steps.map((step) => (
+            /*
+             * The site's standard card hover — lift, accent edge, shadow.
+             * Nothing animates on the step number: these are wide full-width
+             * rows, and a moving numeral in the left column reads as fidget
+             * rather than feedback. Not links, so the cursor stays default.
+             */
             <RevealItem
               as="li"
               key={step.number}
-              className="flex flex-col gap-3 rounded-2xl border border-line bg-white p-6 sm:flex-row sm:gap-8 sm:p-7"
+              className="flex flex-col gap-3 rounded-2xl border border-line bg-white p-6 transition-[border-color,box-shadow,translate] duration-300 ease-out hover:border-accent hover:shadow-panel motion-safe:hover:-translate-y-1 sm:flex-row sm:gap-8 sm:p-7"
             >
               <span
                 aria-hidden="true"
