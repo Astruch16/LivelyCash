@@ -188,7 +188,7 @@ export default async function CityPage(props: PageProps<"/cities/[city]">) {
                 />
                 <CtaButton
                   href="/processing"
-                  variant="accent"
+                  variant="accent-ink"
                   size="md"
                   className="mt-6"
                 >

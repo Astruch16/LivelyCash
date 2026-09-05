@@ -66,7 +66,7 @@ export function CtaBanner({
               </div>
 
               <div className="shrink-0">
-                <CtaButton href="/contact" variant="accent">
+                <CtaButton href="/contact" variant="accent-ink">
                   {primaryLabel}
                 </CtaButton>
               </div>
