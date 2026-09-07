@@ -1,7 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { StoreIcon } from "lucide-react";
 
-import { HexIcon } from "@/components/marketing/hex";
 import { cn } from "@/lib/utils";
 
 /**
@@ -28,7 +26,7 @@ export function Marquee<T>({
   items,
   renderItem,
   getKey,
-  durationSeconds = 60,
+  durationSeconds = 72,
   copies = 3,
   className,
   label,
@@ -50,8 +48,14 @@ export function Marquee<T>({
       tabIndex={0}
       className={cn(
         "group relative flex scrollbar-none overflow-x-auto",
-        // Fades both edges so cards leave the strip rather than clipping.
-        "mask-[linear-gradient(to_right,transparent,black_5rem,black_calc(100%-5rem),transparent)]",
+        /*
+         * Fades both edges so cards leave the strip rather than clipping. The
+         * fade is narrower on small screens: at 5rem a side it would consume
+         * 160px of a 390px viewport, leaving no width in which a 288px card is
+         * ever fully legible.
+         */
+        "mask-[linear-gradient(to_right,transparent,black_1.5rem,black_calc(100%-1.5rem),transparent)]",
+        "sm:mask-[linear-gradient(to_right,transparent,black_5rem,black_calc(100%-5rem),transparent)]",
         className,
       )}
     >
@@ -69,7 +73,7 @@ export function Marquee<T>({
             key={index}
             // Only the first copy is real content; the rest are visual filler.
             aria-hidden={index === 0 ? undefined : "true"}
-            className="flex shrink-0 gap-4 pr-4"
+            className="flex shrink-0 gap-8 pr-8"
           >
             {items.map((item) => (
               <li key={getKey(item)} className="flex">
@@ -86,11 +90,15 @@ export function Marquee<T>({
 /**
  * The card the partner marquee is built from.
  *
- * Built to the same recipe as the service-area cards — hexagon chip, display
- * name, mono meta line — so the strip reads as part of the page rather than a
- * separate widget. Fixed width with a minimum height, since the names vary
- * from "Lami Cuts" to "Chillibowl Lanes & Pool Hall" and a row of cards that
- * changed size with the copy would ripple as it scrolled.
+ * Landscape rather than square, and stripped to the two things worth reading
+ * at scrolling speed: the business, and the town it is in. Nine identical
+ * icons down a moving strip added repetition rather than information, so
+ * there is none — the card is the name and the place.
+ *
+ * Fixed width with a minimum height, since the names run from "Lami Cuts" to
+ * "Chillibowl Lanes & Pool Hall" and cards that resized with their copy would
+ * ripple as they scrolled past. Content is centred vertically so a one-line
+ * and a two-line name sit on the same optical axis.
  */
 export function MarqueeChip({
   name,
@@ -100,19 +108,12 @@ export function MarqueeChip({
   detail?: string;
 }) {
   return (
-    <span className="flex min-h-44 w-52 flex-col rounded-2xl border border-line bg-white p-5">
-      <HexIcon size="sm" frameClassName="text-accent/70">
-        <StoreIcon
-          aria-hidden="true"
-          strokeWidth={1.5}
-          className="size-4 text-ink"
-        />
-      </HexIcon>
-      <span className="mt-auto block pt-6 font-display text-[0.9375rem] text-balance text-ink">
+    <span className="flex min-h-32 w-72 flex-col justify-center rounded-2xl border border-line bg-white px-7 py-6">
+      <span className="block font-display text-[0.9375rem] text-balance text-ink">
         {name}
       </span>
       {detail ? (
-        <span className="mt-2.5 block font-mono text-[0.625rem] tracking-[0.2em] text-ink-soft uppercase">
+        <span className="mt-3 block font-mono text-[0.625rem] tracking-[0.2em] text-ink-soft uppercase">
           {detail}
         </span>
       ) : null}
