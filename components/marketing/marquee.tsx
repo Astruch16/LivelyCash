@@ -108,7 +108,7 @@ export function MarqueeChip({
   detail?: string;
 }) {
   return (
-    <span className="flex min-h-32 w-72 flex-col justify-center rounded-2xl border border-line bg-white px-7 py-6">
+    <span className="flex min-h-32 w-72 flex-col justify-center rounded-2xl border border-accent bg-white px-7 py-6">
       <span className="block font-display text-[0.9375rem] text-balance text-ink">
         {name}
       </span>
