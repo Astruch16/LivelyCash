@@ -147,9 +147,17 @@ export default function ContactPage() {
                   Pick &ldquo;Not sure yet&rdquo; in the form, or read the full
                   breakdown of all three first.
                 </p>
+                {/*
+                 * The underline appears on hover rather than at rest. This is
+                 * a standalone call to action with an arrow, not a link buried
+                 * in a sentence, so it does not need the underline to be
+                 * recognised — unlike the phone number in the contact form's
+                 * success state, which keeps its own. `focus-visible` matches
+                 * the hover so a keyboard gets the same signal a pointer does.
+                 */}
                 <Link
                   href="/plans"
-                  className="mt-5 inline-block font-mono text-[0.625rem] tracking-[0.2em] text-ink uppercase underline underline-offset-4"
+                  className="mt-5 inline-block font-mono text-[0.625rem] tracking-[0.2em] text-ink uppercase underline-offset-4 hover:underline focus-visible:underline"
                 >
                   Compare the programs &rarr;
                 </Link>
