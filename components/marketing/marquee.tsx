@@ -60,7 +60,14 @@ export function Marquee<T>({
       )}
     >
       <div
-        className="flex w-max marquee-track group-focus-within:paused group-hover:paused"
+        /*
+         * Keyboard focus still pauses the track; hover no longer does. That
+         * focus stop is what keeps this compliant with WCAG 2.2.2, which wants
+         * a mechanism to pause content that moves for more than five seconds —
+         * the strip carries `tabIndex={0}` for exactly that. The other stop is
+         * `prefers-reduced-motion`, which drops the animation entirely.
+         */
+        className="flex w-max marquee-track group-focus-within:paused"
         style={
           {
             "--marquee-duration": `${durationSeconds}s`,
