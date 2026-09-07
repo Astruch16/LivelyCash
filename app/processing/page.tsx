@@ -322,7 +322,7 @@ export default function ProcessingPage() {
               <CtaButton href="/contact" variant="dark">
                 Ask about connecting
               </CtaButton>
-              <CtaButton href="/plans" variant="ghost">
+              <CtaButton href="/plans" variant="outline">
                 See program costs
               </CtaButton>
             </div>

@@ -252,7 +252,7 @@ export function Hero() {
                   Get Started
                 </CtaButton>
               </span>
-              <CtaButton href="/plans" variant="ghost">
+              <CtaButton href="/plans" variant="outline">
                 See Our Plans
               </CtaButton>
             </motion.div>

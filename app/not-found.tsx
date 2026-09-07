@@ -22,7 +22,7 @@ export default function NotFound() {
           <CtaButton href="/" variant="dark">
             Back to home
           </CtaButton>
-          <CtaButton href="/contact" variant="ghost">
+          <CtaButton href="/contact" variant="outline">
             Contact us
           </CtaButton>
         </PageHeader>
