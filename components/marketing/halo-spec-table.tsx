@@ -1,5 +1,6 @@
 import { Reveal } from "@/components/marketing/reveal";
 import { Eyebrow } from "@/components/marketing/section";
+import { Typewriter } from "@/components/marketing/typewriter";
 import { haloIiSpecs } from "@/lib/halo-ii";
 
 /**
@@ -7,6 +8,16 @@ import { haloIiSpecs } from "@/lib/halo-ii";
  * the left, values on the right, hairline between rows. Long groups
  * ("Additional features") and one-line groups ("Power supply") sit in the same
  * rhythm, which a card grid would not manage without ragged whitespace.
+ *
+ * The heading and the row labels type themselves out as they scroll past, so
+ * the sheet reads like a machine printing its own spec. They are the only text
+ * here already set in mono and uppercase, which is why the effect lands on
+ * them and not on the values — typing several hundred words of specification
+ * would be a stunt rather than a detail, and would hold the reader up.
+ *
+ * Each label triggers on its own row entering view rather than off one
+ * sequence at the top, so nothing is queued behind a line the reader has not
+ * reached yet.
  */
 export function HaloSpecTable() {
   return (
@@ -15,7 +26,9 @@ export function HaloSpecTable() {
         id="halo-ii-specs"
         className="scroll-mt-28 rounded-3xl border border-line bg-base-soft p-6 sm:p-9 lg:p-12"
       >
-        <Eyebrow as="h3">Full specifications</Eyebrow>
+        <Eyebrow as="h3">
+          <Typewriter text="Full specifications" speed={55} />
+        </Eyebrow>
 
         <dl className="mt-9 border-t border-line">
           {haloIiSpecs.map((group) => (
@@ -24,7 +37,7 @@ export function HaloSpecTable() {
               className="grid gap-2 border-b border-line py-5 sm:grid-cols-[13rem_1fr] sm:gap-8"
             >
               <dt className="font-mono text-[0.6875rem] font-medium tracking-[0.16em] text-ink-soft uppercase">
-                {group.label}
+                <Typewriter text={group.label} />
               </dt>
               <dd>
                 <ul className="flex flex-col gap-2.5 text-sm text-ink">
