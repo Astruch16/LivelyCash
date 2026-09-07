@@ -137,7 +137,7 @@ export function PlanSummaryCard({ plan }: { plan: Plan }) {
       <div className="mt-6">
         <CtaButton
           href={`/plans#${plan.slug}`}
-          variant={ink ? "accent" : "outline"}
+          variant={ink ? "accent-ink" : "outline"}
           size="md"
         >
           {plan.shortName} details
