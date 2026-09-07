@@ -139,7 +139,7 @@ export default function WhyUsPage() {
             <CtaButton href="/contact" variant="dark">
               Start a conversation
             </CtaButton>
-            <CtaButton href="/plans" variant="ghost">
+            <CtaButton href="/plans" variant="outline">
               See the programs
             </CtaButton>
           </PageHeader>

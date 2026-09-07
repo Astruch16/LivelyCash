@@ -90,7 +90,7 @@ export default async function CityPage(props: PageProps<"/cities/[city]">) {
               <CtaButton href="/contact" variant="dark">
                 Free {city.name} assessment
               </CtaButton>
-              <CtaButton href="/plans" variant="ghost">
+              <CtaButton href="/plans" variant="outline">
                 See our plans
               </CtaButton>
             </PageHeader>
@@ -138,7 +138,7 @@ export default async function CityPage(props: PageProps<"/cities/[city]">) {
                   <CtaButton href="/contact" variant="dark">
                     Contact us
                   </CtaButton>
-                  <CtaButton href="/plans" variant="ghost">
+                  <CtaButton href="/plans" variant="outline">
                     Compare the programs
                   </CtaButton>
                 </div>
