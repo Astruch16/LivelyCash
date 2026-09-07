@@ -119,8 +119,16 @@ export default function HomePage() {
       >
         <Container className="relative">
           <Reveal>
+            {/*
+             * Centred, unlike every other section header on the page. The
+             * marquee beneath is full-bleed and symmetrical, so a header
+             * stacked against the left edge left the block visibly
+             * lopsided — this is the one section whose content is not
+             * bound to the text column.
+             */}
             <SectionHeader
               id="partners-heading"
+              align="center"
               eyebrow="Our locations"
               title="Trusted by Local Businesses"
               description="Barbers, markets, breweries, nightclubs, bowling alleys and curling clubs across the Valley run a Lively Cash machine."

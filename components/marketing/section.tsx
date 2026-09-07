@@ -95,15 +95,26 @@ export function Eyebrow({
   surface = "light",
   as: Comp = "p",
   id,
+  align = "left",
 }: {
   children: ReactNode;
   className?: string;
   surface?: Surface;
   as?: ElementType;
   id?: string;
+  /** Matches the block the eyebrow sits in; centres the rule under the label. */
+  align?: "left" | "center";
 }) {
+  const centred = align === "center";
+
   return (
-    <div className={cn("flex flex-col items-start gap-2.5", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-2.5",
+        centred ? "items-center" : "items-start",
+        className,
+      )}
+    >
       <Comp
         id={id}
         className={cn(
@@ -113,7 +124,7 @@ export function Eyebrow({
       >
         {children}
       </Comp>
-      <AccentRule />
+      <AccentRule className={centred ? "origin-center" : undefined} />
     </div>
   );
 }
@@ -189,7 +200,11 @@ export function SectionHeader({
         className,
       )}
     >
-      {eyebrow ? <Eyebrow surface={surface}>{eyebrow}</Eyebrow> : null}
+      {eyebrow ? (
+        <Eyebrow surface={surface} align={align}>
+          {eyebrow}
+        </Eyebrow>
+      ) : null}
       <DisplayHeading
         as={as}
         id={id}
