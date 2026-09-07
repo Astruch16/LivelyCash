@@ -330,15 +330,17 @@
 }
 
 /*
- * Partner marquee. The track holds two identical copies of the list, so
- * translating it by half its width loops seamlessly.
+ * Partner marquee. The track holds N identical copies of the list, and the
+ * shift is exactly one copy's width, so copy 2 lands where copy 1 started and
+ * the loop is seamless. `--marquee-shift` is set by the component from the
+ * copy count it rendered — see the note there on how many are needed.
  */
 @keyframes lc-marquee {
   from {
     transform: translateX(0);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(var(--marquee-shift, -50%));
   }
 }
 
