@@ -28,8 +28,15 @@ const shellStyles: Record<CtaVariant, string> = {
    * `transition-colors`, which does not cover box-shadow.
    */
   dark: "bg-ink text-white ring-1 ring-transparent transition-[background-color,box-shadow] hover:bg-black hover:ring-accent focus-visible:outline-ink",
+  /*
+   * The hover edge is ink: on a light surface accent-on-accent would vanish,
+   * and white would too. Completes the set — a filled button always takes a
+   * contrasting edge on hover, accent on `dark`, white on `accent-ink`, ink
+   * here. A ring rather than a border, so nothing shifts; see the note on
+   * `dark`.
+   */
   accent:
-    "bg-accent text-ink hover:bg-accent-deep focus-visible:outline-ink focus-visible:outline-offset-3",
+    "bg-accent text-ink ring-1 ring-transparent transition-[background-color,box-shadow] hover:bg-accent-deep hover:ring-ink focus-visible:outline-ink focus-visible:outline-offset-3",
   /*
    * `accent` for a dark surface. Same fill, but the hover edge is white:
    * accent-on-accent would be invisible, and ink would disappear into the band
