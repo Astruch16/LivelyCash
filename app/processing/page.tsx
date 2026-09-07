@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import {
   ActivityIcon,
   LockIcon,
@@ -11,6 +10,7 @@ import {
 import { JsonLd } from "@/components/json-ld";
 import { CtaBanner } from "@/components/marketing/cta-banner";
 import { CtaButton } from "@/components/marketing/cta-button";
+import { ProcessingDiagram } from "@/components/marketing/processing-diagram";
 import { HexIcon } from "@/components/marketing/hex";
 import { InkBand } from "@/components/marketing/ink-band";
 import { Reveal, RevealGroup, RevealItem } from "@/components/marketing/reveal";
@@ -134,14 +134,7 @@ export default function ProcessingPage() {
                 Get connected
               </CtaButton>
             </PageHeader>
-            <Image
-              src="/images/processing-network.svg"
-              alt="Diagram showing a transaction travelling from the ATM over an encrypted link to the processing network and back"
-              width={720}
-              height={320}
-              priority
-              className="h-auto w-full rounded-2xl border border-line"
-            />
+            <ProcessingDiagram className="h-auto w-full rounded-2xl border border-line" />
           </div>
         </Container>
       </section>
