@@ -22,7 +22,11 @@ import { Hero } from "@/components/marketing/hero";
 import { PartnerMarquee } from "@/components/marketing/partner-marquee";
 import { PlanSummaryCard } from "@/components/marketing/plan-cards";
 import { Reveal, RevealGroup, RevealItem } from "@/components/marketing/reveal";
-import { Section, SectionHeader } from "@/components/marketing/section";
+import {
+  Container,
+  Section,
+  SectionHeader,
+} from "@/components/marketing/section";
 import { ServiceAreaGrid } from "@/components/marketing/service-areas";
 import { StatBand } from "@/components/marketing/stat-band";
 import { atmServiceJsonLd } from "@/lib/jsonld";
@@ -103,20 +107,30 @@ export default function HomePage() {
 
       <Hero />
 
-      {/* Partners */}
-      <Section tone="soft" aria-labelledby="partners-heading">
-        <Reveal>
-          <SectionHeader
-            id="partners-heading"
-            eyebrow="Our locations"
-            title="Trusted by Local Businesses"
-            description="Barbers, markets, breweries, nightclubs, bowling alleys and curling clubs across the Valley run a Lively Cash machine."
-          />
-        </Reveal>
-        <Reveal className="-mx-5 mt-12 sm:-mx-6 lg:-mx-8">
+      {/*
+       * Partners. Written out rather than using `Section`, which wraps its
+       * children in the max-width container: the marquee runs the full width
+       * of the viewport so the strip reads as continuous rather than as a
+       * widget boxed inside the text column. Only the header is contained.
+       */}
+      <section
+        aria-labelledby="partners-heading"
+        className="relative scroll-mt-28 bg-base-soft py-16 text-ink sm:py-20 lg:py-24"
+      >
+        <Container className="relative">
+          <Reveal>
+            <SectionHeader
+              id="partners-heading"
+              eyebrow="Our locations"
+              title="Trusted by Local Businesses"
+              description="Barbers, markets, breweries, nightclubs, bowling alleys and curling clubs across the Valley run a Lively Cash machine."
+            />
+          </Reveal>
+        </Container>
+        <Reveal className="mt-12">
           <PartnerMarquee />
         </Reveal>
-      </Section>
+      </section>
 
       {/* Hardware */}
       <Section aria-labelledby="hardware-heading">
