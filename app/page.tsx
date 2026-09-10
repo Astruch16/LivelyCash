@@ -313,7 +313,12 @@ export default function HomePage() {
         </RevealGroup>
 
         <Reveal className="mt-10">
-          <CtaButton href="/plans" variant="ghost">
+          {/*
+           * Outlined rather than ghost even though nothing filled sits beside
+           * it: on its own under the three plan cards a bare label read as a
+           * caption rather than the next thing to click.
+           */}
+          <CtaButton href="/plans" variant="outline">
             Compare all three programs
           </CtaButton>
         </Reveal>
