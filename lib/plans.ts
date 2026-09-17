@@ -170,8 +170,19 @@ export const amlOnboarding = {
 export const plansClosingLine =
   "If you are interested in any of these programs or would like to discuss possible alterations, please let us know and we'd be happy to help!";
 
-/** Plan options offered in the contact form's "Plan of interest" select. */
+/**
+ * Plan options offered in the contact form's "Plan of interest" select.
+ *
+ * This one list drives the select's options, the server-side Zod enum in
+ * `lib/contact-schema.ts`, and the guard on the `?plan=` query parameter — so
+ * anything linking to the form with a plan preselected must appear here, or
+ * the link silently arrives with the field blank.
+ *
+ * The mobile service sits after the three placement programs, which are one
+ * ordered decision, and "Not sure yet" stays last.
+ */
 export const planInterestOptions = [
   ...plans.map((plan) => plan.name),
+  mobileAtmPlan.name,
   "Not sure yet",
 ] as const;
