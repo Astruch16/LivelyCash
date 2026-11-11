@@ -29,6 +29,7 @@ import {
 } from "@/components/marketing/section";
 import { ServiceAreaGrid } from "@/components/marketing/service-areas";
 import { StatBand } from "@/components/marketing/stat-band";
+import { TestimonialGrid } from "@/components/marketing/testimonials";
 import { atmServiceJsonLd } from "@/lib/jsonld";
 import { plans } from "@/lib/plans";
 import { pageMetadata } from "@/lib/seo";
@@ -324,8 +325,39 @@ export default function HomePage() {
         </Reveal>
       </Section>
 
-      {/* By the numbers */}
-      <StatBand />
+      {/*
+       * By the numbers, then the partners in their own words. Soft rather
+       * than white: sitting between the plans grid and the service areas,
+       * both of which are white, a white section here would merge its own
+       * padding with theirs into one long void. The page alternates tones
+       * for exactly this reason.
+       */}
+      <Section tone="soft" aria-labelledby="reviews-heading">
+        <StatBand />
+
+        <Reveal className="mt-16 sm:mt-20">
+          <SectionHeader
+            id="reviews-heading"
+            align="center"
+            eyebrow="In their words"
+            title="What Our Partners Say"
+            description="The businesses running our machines on what it is actually like to work with us."
+          />
+        </Reveal>
+
+        <div className="mt-12">
+          <TestimonialGrid />
+        </div>
+
+        <Reveal className="mt-12 flex flex-col items-center gap-5 text-center">
+          <p className="text-pretty text-ink-soft">
+            Want an ATM working this hard for your business?
+          </p>
+          <CtaButton href="/contact" variant="dark">
+            Become a partner
+          </CtaButton>
+        </Reveal>
+      </Section>
 
       {/* Service areas */}
       <Section aria-labelledby="areas-heading">

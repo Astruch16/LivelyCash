@@ -12,7 +12,6 @@ import {
 import { animate, useInView, useReducedMotion } from "motion/react";
 
 import { InkBand } from "@/components/marketing/ink-band";
-import { Container } from "@/components/marketing/section";
 import { cn } from "@/lib/utils";
 
 type Stat = {
@@ -125,53 +124,44 @@ export function StatBand() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.3 });
 
+  /*
+   * Just the band — the section around it belongs to the page, which pairs it
+   * with the partner reviews underneath.
+   */
   return (
-    /*
-     * Soft rather than white: sitting between the plans grid and the service
-     * areas, both of which are white, a white band here would merge its own
-     * padding with theirs into one long void. The page alternates tones for
-     * exactly this reason.
-     */
-    <section
-      aria-label="Lively Cash ATMs by the numbers"
-      className="bg-base-soft"
-    >
-      <Container className="py-16 sm:py-20 lg:py-24">
-        <div ref={ref}>
-          <InkBand className="border border-accent px-2 py-10 sm:px-6 sm:py-12">
-            <dl className="grid grid-cols-2 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
-              {stats.map((stat, index) => (
-                <div
-                  key={stat.label}
-                  className={cn(
-                    "flex flex-col items-center px-3 text-center sm:px-6",
-                    dividerClass(index, stats.length),
-                  )}
-                >
-                  <stat.icon
-                    aria-hidden="true"
-                    strokeWidth={1.4}
-                    className="size-6 text-accent"
-                  />
-                  {/*
-                   * Two line-heights tall whatever the value: "Fraser Valley"
-                   * wraps and the figures do not, and without a fixed box the
-                   * labels underneath would sit at different heights across
-                   * the row. `lh` keeps it tied to the type rather than to a
-                   * magic pixel value.
-                   */}
-                  <dd className="mt-4 flex min-h-[2lh] items-center font-display text-lg leading-tight text-white tabular-nums sm:text-xl">
-                    <StatValue stat={stat} active={inView} />
-                  </dd>
-                  <dt className="mt-2 font-mono text-[0.625rem] tracking-[0.18em] text-ink-muted uppercase">
-                    {stat.label}
-                  </dt>
-                </div>
-              ))}
-            </dl>
-          </InkBand>
-        </div>
-      </Container>
-    </section>
+    <div ref={ref} role="group" aria-label="Lively Cash ATMs by the numbers">
+      <InkBand className="border border-accent px-2 py-10 sm:px-6 sm:py-12">
+        <dl className="grid grid-cols-2 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+          {stats.map((stat, index) => (
+            <div
+              key={stat.label}
+              className={cn(
+                "flex flex-col items-center px-3 text-center sm:px-6",
+                dividerClass(index, stats.length),
+              )}
+            >
+              <stat.icon
+                aria-hidden="true"
+                strokeWidth={1.4}
+                className="size-6 text-accent"
+              />
+              {/*
+               * Two line-heights tall whatever the value: "Fraser Valley"
+               * wraps and the figures do not, and without a fixed box the
+               * labels underneath would sit at different heights across
+               * the row. `lh` keeps it tied to the type rather than to a
+               * magic pixel value.
+               */}
+              <dd className="mt-4 flex min-h-[2lh] items-center font-display text-lg leading-tight text-white tabular-nums sm:text-xl">
+                <StatValue stat={stat} active={inView} />
+              </dd>
+              <dt className="mt-2 font-mono text-[0.625rem] tracking-[0.18em] text-ink-muted uppercase">
+                {stat.label}
+              </dt>
+            </div>
+          ))}
+        </dl>
+      </InkBand>
+    </div>
   );
 }
