@@ -131,7 +131,7 @@ export default function HomePage() {
               align="center"
               eyebrow="Our locations"
               title="Trusted by Local Businesses"
-              description="Barbers, markets, breweries, nightclubs, bowling alleys and curling clubs across the Valley run a Lively Cash machine."
+              description="Barbers, markets, breweries, nightclubs, bowling alleys, vape shops and golf courses across the Valley run a Lively Cash machine."
             />
           </Reveal>
         </Container>
