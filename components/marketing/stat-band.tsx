@@ -29,9 +29,9 @@ type Stat = {
 const stats: Stat[] = [
   {
     icon: BoxIcon,
-    display: "10",
+    display: "11",
     label: "ATMs deployed",
-    countTo: 10,
+    countTo: 11,
   },
   {
     icon: UsersIcon,
