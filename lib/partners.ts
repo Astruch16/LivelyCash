@@ -17,7 +17,8 @@ export const partners: Partner[] = [
   { name: "Luxe Nightclub", city: "Chilliwack" },
   { name: "Mountainview Brewing Co.", city: "Hope" },
   { name: "Chillibowl Lanes & Pool Hall", city: "Chilliwack" },
-  { name: "Chilliwack Curling Club", city: "Chilliwack" },
   { name: "Unsworth Market", city: "Chilliwack" },
   { name: "Vape Escape", city: "Abbotsford" },
+  { name: "Ledgeview Golf Course", city: "Abbotsford" },
+  { name: "Super Puffs Vapes", city: "Chilliwack" },
 ];
